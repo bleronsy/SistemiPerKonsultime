@@ -1,0 +1,95 @@
+<?php
+session_start();
+
+// Server configuration
+$host = 'localhost';  // Replace with your desired host
+$port = 12345;  // Replace with your desired port
+
+// Create a TCP socket
+$socket = socket_create(AF_INET, SOCK_STREAM, SOL_TCP);
+
+// Bind the socket to the host and port
+socket_bind($socket, $host, $port);
+
+// Listen for incoming connections
+socket_listen($socket);
+
+// Store client connections
+$clientSockets = array($socket);
+?>
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8"/>
+    <title>Tuts+ Chat Application</title>
+    <meta name="description" content="Tuts+ Chat Application"/>
+    <link rel="stylesheet" href="style.css"/>
+</head>
+<body>
+<?php
+if (!isset($_SESSION['name'])) {
+    loginForm();
+} else {
+    ?>
+    <div id="wrapper">
+        <div id="menu">
+            <p class="welcome">Welcome, <b><?php echo $_SESSION['name']; ?></b></p>
+            <p class="logout"><a id="exit" href="#">Exit Chat</a></p>
+        </div>
+        <div id="chatbox">
+            <?php
+            if (file_exists("log.html") && filesize("log.html") > 0) {
+                $contents = file_get_contents("log.html");
+                echo $contents;
+            }
+            ?>
+        </div>
+        <form name="message" action="">
+            <input name="usermsg" type="text" id="usermsg"/>
+            <input name="submitmsg" type="submit" id="submitmsg" value="Send"/>
+        </form>
+    </div>
+    <script type="text/javascript"
+            src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script type="text/javascript">
+        // jQuery Document
+        $(document).ready(function () {
+            $("#submitmsg").click(function () {
+                var clientmsg = $("#usermsg").val();
+                $.post("post.php", {text: clientmsg});
+                $("#usermsg").val("");
+                return false;
+            });
+
+            function loadLog() {
+                var oldscrollHeight = $("#chatbox")[0].scrollHeight - 20; //Scroll height before the request
+                $.ajax({
+                    url: "log.html",
+                    cache: false,
+                    success: function (html) {
+                        $("#chatbox").html(html); //Insert chat log into the #chatbox div
+                        //Auto-scroll
+                        var newscrollHeight = $("#chatbox")[0].scrollHeight - 20; //Scroll height after the request
+                        if (newscrollHeight > oldscrollHeight) {
+                            $("#chatbox").animate({scrollTop: newscrollHeight}, 'normal'); //Autoscroll to bottom of div
+                        }
+                    }
+                });
+            }
+
+            setInterval(loadLog, 2500);
+
+            $("#exit").click(function () {
+                var exit = confirm("Are you sure you want to end the session?");
+                if (exit === true) {
+                    window.location.href = "index.php?logout=true"; // Redirect to the logout URL
+                }
+            });
+        });
+    </script>
+    </body>
+    </html>
+    <?php
+}
+?>
