@@ -1,4 +1,7 @@
 <?php
+// Start the session
+session_start();
+
 // Establish the database connection
 $servername = "localhost";
 $username = "root";
@@ -8,6 +11,22 @@ $dbname = "pd";
 $conn = new mysqli($servername, $username, $password, $dbname);
 if ($conn->connect_error) {
     die("Connection failed: " . $conn->connect_error);
+}
+
+// Check if the user is already logged in
+if (isset($_SESSION['email'])) {
+    $role = $_SESSION['role'];
+
+    // Determine the appropriate redirection based on the user's role
+    if ($role == 'student') {
+        header("Location: chat.php");
+        exit();
+    } elseif ($role == 'professor') {
+        header("Location: profesori.php");
+        exit();
+    } else {
+        echo "Invalid role.";
+    }
 }
 
 // Retrieve the form data and perform login processing
@@ -27,9 +46,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $row = $result->fetch_assoc();
         $role = $row['roli'];
 
+        // Store user information in the session
+        $_SESSION['email'] = $email;
+        $_SESSION['role'] = $role;
+
         // Determine the appropriate redirection based on the user's role
         if ($role == 'student') {
-            header("Location: studenti.php");
+            header("Location: chat.php");
             exit();
         } elseif ($role == 'professor') {
             header("Location: profesori.php");
@@ -85,7 +108,7 @@ $conn->close();
             background-color: #555;
         }
 
-        a{
+        a {
             text-decoration: none;
             color: black;
             font-size: smaller;
