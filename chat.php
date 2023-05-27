@@ -129,16 +129,24 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['usermsg'])) {
                 }
             });
 
-            // Clear chatbox and save contents every 3 seconds
+            // Load new messages every 3 seconds
             setInterval(function () {
-                $('#chatbox').html(''); // Clear chatbox
+                // Get current contents from chatbox
+                var currentContents = $('#chatbox').html();
 
                 // Load contents from log.html
                 $.ajax({
                     url: 'log.html',
                     dataType: 'html',
                     success: function (data) {
-                        $('#chatbox').html(data);
+                        // Only append new messages to the chatbox
+                        if (currentContents !== data) {
+                            $('#chatbox').html(data);
+
+                            // Scroll to the bottom of the chatbox
+                            var chatbox = document.getElementById("chatbox");
+                            chatbox.scrollTop = chatbox.scrollHeight;
+                        }
                     }
                 });
             }, 3000);
