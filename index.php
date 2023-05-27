@@ -29,10 +29,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         // Get the student ID
         $student_row = mysqli_fetch_assoc($student_result);
         $studentId = $student_row['student_id'];
+        $studentName = $student_row['student_name'];
 
         // Set the student ID in the session
         $_SESSION['student_id'] = $studentId;
         $_SESSION['id'] = $studentId; // Set the ID for compatibility with the existing code
+        $_SESSION['name'] = $studentName;
 
         header('Location: studenti.php');
         exit();
@@ -47,10 +49,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         // Get the professor ID
         $professor_row = mysqli_fetch_assoc($professor_result);
         $professorId = $professor_row['professor_id'];
+        $professorName = $professor_row['professor_name'];
 
         // Set the professor ID in the session
         $_SESSION['professor_id'] = $professorId;
         $_SESSION['id'] = $professorId; // Set the ID for compatibility with the existing code
+        $_SESSION['name'] =$professorName;
 
         // Redirect to professor chat page (professor_chat.php)
         header('Location: profesori.php');
