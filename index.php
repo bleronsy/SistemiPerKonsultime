@@ -1,5 +1,6 @@
 <?php
-session_start();
+session_start(); // Start the session
+
 // Check if the form is submitted
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     // Get the submitted ID and password
@@ -29,9 +30,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $student_row = mysqli_fetch_assoc($student_result);
         $studentId = $student_row['student_id'];
 
-        // Start the session and set the student ID
+        // Set the student ID in the session
         $_SESSION['student_id'] = $studentId;
-        $_SESSION['id'] = $studentId;
+        $_SESSION['id'] = $studentId; // Set the ID for compatibility with the existing code
 
         header('Location: studenti.php');
         exit();
@@ -47,12 +48,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $professor_row = mysqli_fetch_assoc($professor_result);
         $professorId = $professor_row['professor_id'];
 
-        // Start the session and set the professor ID
+        // Set the professor ID in the session
         $_SESSION['professor_id'] = $professorId;
-        $_SESSION['id'] = $professorId;
+        $_SESSION['id'] = $professorId; // Set the ID for compatibility with the existing code
 
         // Redirect to professor chat page (professor_chat.php)
-        header('Location: professor_chat.php');
+        header('Location: profesori.php');
         exit();
     }
 
@@ -92,17 +93,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         input[type="text"],
         input[type="password"] {
             width: 100%;
-            padding: 8px;
-            margin-bottom: 15px;
-            border: 1px solid #ccc;
+            padding: 10px;
+            margin-bottom: 20px;
             border-radius: 3px;
+            border: 1px solid #ccc;
         }
 
         input[type="submit"] {
             width: 100%;
-            padding: 10px;
-            background-color: #4CAF50;
+            background-color: #4caf50;
             color: #fff;
+            padding: 10px;
             border: none;
             border-radius: 3px;
             cursor: pointer;
@@ -111,27 +112,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         input[type="submit"]:hover {
             background-color: #45a049;
         }
-
-        a {
-            display: block;
-            text-align: center;
-            color: #999;
-            margin-top: 10px;
-        }
-
-        a:hover {
-            color: #666;
-        }
     </style>
 </head>
 <body>
     <h1>Login</h1>
     <form method="POST" action="index.php">
         <label for="id">ID:</label>
-        <input type="text" name="id" id="id" required><br><br>
+        <input type="text" name="id" id="id" required>
 
         <label for="password">Password:</label>
-        <input type="password" name="password" id="password" required><br><br>
+        <input type="password" name="password" id="password" required>
 
         <input type="submit" value="Login">
     </form>

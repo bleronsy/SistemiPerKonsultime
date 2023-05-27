@@ -5,7 +5,7 @@ const io = require('socket.io')(server);
 const { v4: uuidV4 } = require('uuid')
 
 
-server.listen(3000);
+server.listen(8080);
 app.set('view engine', 'ejs');
 app.use(express.static('public'));
 
