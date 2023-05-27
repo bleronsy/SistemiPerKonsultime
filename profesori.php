@@ -76,12 +76,28 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         if (mysqli_num_rows($appointments_result) > 0) {
             echo '<table>';
-            echo '<tr><th>Appointment ID</th><th>Student ID</th><th>Datetime</th><th>Status</th><th>Decision</th></tr>';
+            echo '<tr><th>Appointment ID</th><th>Student ID</th><th>Start Datetime</th><th>End Datetime</th><th>Status</th><th>Decision</th></tr>';
             while ($row = mysqli_fetch_assoc($appointments_result)) {
                 echo '<tr>';
                 echo '<td>' . $row['appointment_id'] . '</td>';
-                echo '<td>' . $row['student_id'] . '</td>';
-                echo '<td>' . $row['datetime'] . '</td>';
+                $studentId = $row['student_id'];
+
+                // Fetch the student's name and surname from the students table
+                $student_query = "SELECT student_name, student_surname FROM students WHERE student_id = '$studentId'";
+                $student_result = mysqli_query($conn, $student_query);
+
+                if (mysqli_num_rows($student_result) > 0) {
+                    $student_row = mysqli_fetch_assoc($student_result);
+                    $studentName = $student_row['student_name'];
+                    $studentSurname = $student_row['student_surname'];
+                } else {
+                    $studentName = 'Unknown';
+                    $studentSurname = 'Unknown';
+                }
+
+                echo '<td>' . $studentName . ' ' . $studentSurname . '</td>';
+                echo '<td>' . $row['datetime_start'] . '</td>';
+                echo '<td>' . $row['datetime_end'] . '</td>';
                 echo '<td>' . $row['status'] . '</td>';
                 if ($row['status'] === 'pending') {
                     echo '<td>';
