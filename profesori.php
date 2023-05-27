@@ -3,9 +3,53 @@ session_start();
 
 // Check if the form is submitted
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    // Get the appointment ID and decision (accept or refuse)
-    $appointmentId = $_POST['appointment_id'];
-    $decision = $_POST['decision'];
+    // Check if appointment_id and decision are set
+    if (isset($_POST['appointment_id'], $_POST['decision'])) {
+        // Get the appointment ID and decision (accept or refuse)
+        $appointmentId = $_POST['appointment_id'];
+        $decision = $_POST['decision'];
+
+        // Connect to the database (replace with your database credentials)
+        $servername = 'localhost';
+        $username = 'root';
+        $password_db = '';
+        $database = 'pd';
+
+        $conn = mysqli_connect($servername, $username, $password_db, $database);
+
+        // Check connection
+        if (!$conn) {
+            die('Connection failed: ' . mysqli_connect_error());
+        }
+
+        // Update the appointment status based on the decision
+        if ($decision === 'prano') {
+            $status = 'pranuar';
+        } else if ($decision === 'refuzo') {
+            $status = 'refuzuar';
+        } else {
+            echo 'Vendim invalid.';
+            exit();
+        }
+
+        // Prepare the update query
+        $update_query = "UPDATE appointments SET status = '$status' WHERE appointment_id = '$appointmentId'";
+
+        if (mysqli_query($conn, $update_query)) {
+            echo "Statusi i konsultimit u përditësua me sukses.";
+        } else {
+            echo "Problem në përditësimin e statusit të konsultimit: " . mysqli_error($conn);
+        }
+
+        // Close the database connection
+        mysqli_close($conn);
+    }
+}
+
+// Delete the appointment if the form is submitted
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['delete_appointment'])) {
+    // Get the appointment ID to be deleted
+    $deleteAppointmentId = $_POST['delete_appointment'];
 
     // Connect to the database (replace with your database credentials)
     $servername = 'localhost';
@@ -17,26 +61,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     // Check connection
     if (!$conn) {
-        die('Connection failed: ' . mysqli_connect_error());
+        die('Lidhja dështoi: ' . mysqli_connect_error());
     }
 
-    // Update the appointment status based on the decision
-    if ($decision === 'accept') {
-        $status = 'accepted';
-    } else if ($decision === 'refuse') {
-        $status = 'refused';
-    } else {
-        echo 'Invalid decision.';
-        exit();
-    }
+    // Prepare the delete query
+    $delete_query = "DELETE FROM appointments WHERE appointment_id = '$deleteAppointmentId'";
 
-    // Prepare the update query
-    $update_query = "UPDATE appointments SET status = '$status' WHERE appointment_id = '$appointmentId'";
-
-    if (mysqli_query($conn, $update_query)) {
-        echo "Appointment status updated successfully.";
+    if (mysqli_query($conn, $delete_query)) {
+        echo "Konsultimi u shlye me sukses.";
     } else {
-        echo "Error updating the appointment status: " . mysqli_error($conn);
+        echo "Problem në fshirjen e konsultimit: " . mysqli_error($conn);
     }
 
     // Close the database connection
@@ -47,12 +81,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Professor Dashboard</title>
-    <link rel="stylesheet" href="./styles/profesori.php">
+    <title>Profili i profesorit</title>
+    <link rel="stylesheet" href="./styles/profesori.css">
 </head>
 <body>
-    <h1>Professor Dashboard</h1>
-    <h2>Appointments</h2>
+    <h1>Profili i profesorit</h1>
+    <h2>Konsultimet</h2>
     <?php
     // Retrieve the professor ID from the logged-in professor (replace with your authentication logic)
     if (isset($_SESSION['professor_id'])) {
@@ -77,7 +111,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         if (mysqli_num_rows($appointments_result) > 0) {
             echo '<table>';
-            echo '<tr><th>Appointment ID</th><th>Student ID</th><th>Start Datetime</th><th>End Datetime</th><th>Status</th><th>Decision</th></tr>';
+            echo '<tr><th>ID e Konsultimit</th><th>Studenti</th><th>Fillimi</th><th>Përfundimi</th><th>Statusi</th><th>Vendos</th><th>Fshij</th></tr>';
             while ($row = mysqli_fetch_assoc($appointments_result)) {
                 echo '<tr>';
                 echo '<td>' . $row['appointment_id'] . '</td>';
@@ -104,8 +138,18 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     echo '<td>';
                     echo '<form method="POST" action="profesori.php">';
                     echo '<input type="hidden" name="appointment_id" value="' . $row['appointment_id'] . '">';
-                    echo '<input type="submit" name="decision" value="accept">';
-                    echo '<input type="submit" name="decision" value="refuse">';
+                    echo '<input type="submit" name="decision" value="prano">';
+                    echo '<input type="submit" name="decision" value="refuzo">';
+                    echo '</form>';
+                    echo '</td>';
+                } else {
+                    echo '<td></td>';
+                }
+                if ($row['status'] !== 'pending') {
+                    echo '<td>';
+                    echo '<form method="POST" action="profesori.php">';
+                    echo '<input type="hidden" name="delete_appointment" value="' . $row['appointment_id'] . '">';
+                    echo '<input type="submit" value="Fshij">';
                     echo '</form>';
                     echo '</td>';
                 } else {
@@ -115,13 +159,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             }
             echo '</table>';
         } else {
-            echo 'No appointments found.';
+            echo 'Nuk ka konsultime.';
         }
 
         // Close the database connection
         mysqli_close($conn);
     } else {
-        echo 'You are not logged in as a professor.';
+        echo 'Nuk jeni i kyçur si profesor.';
     }
     ?>
 </body>

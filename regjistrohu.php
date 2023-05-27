@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>User Registration</title>
+    <title>Regjistrimi i përdoruesit</title>
     <style>
          body {
             font-family: Arial, sans-serif;
@@ -74,7 +74,7 @@
     // Connect to the database
     $conn = new mysqli($host, $username, $password, $dbname);
     if ($conn->connect_error) {
-        die("Connection failed: " . $conn->connect_error);
+        die("Lidhja dështoi: " . $conn->connect_error);
     }
 
     // Check if form is submitted
@@ -91,7 +91,7 @@
             // Insert into the 'professors' table
             $sql = "INSERT INTO professors (professor_id, professor_name, professor_surname, professor_password) VALUES ('$id', '$emri', '$mbiemri', '$password')";
             if ($conn->query($sql) === TRUE) {
-                echo "Professor registered successfully!";
+                echo "Profesori u regjistrua me sukses!";
             } else {
                 echo "Error: " . $sql . "<br>" . $conn->error;
             }
@@ -99,12 +99,12 @@
             // Insert into the 'students' table
             $sql = "INSERT INTO students (student_id, student_name, student_surname, student_password) VALUES ('$id', '$emri', '$mbiemri', '$password')";
             if ($conn->query($sql) === TRUE) {
-                echo "Student registered successfully!";
+                echo "Studenti u regjistrua me sukses!";
             } else {
                 echo "Error: " . $sql . "<br>" . $conn->error;
             }
         } else {
-            echo "Invalid role selection!";
+            echo "Zgjedhje e gabuar e rolit!";
         }
     }
     ?>

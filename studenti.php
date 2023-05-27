@@ -54,19 +54,19 @@ if (!$conn) {
 }
 
 // Fetch the approved appointments for the student from the database
-$approved_appointments_query = "SELECT * FROM appointments WHERE student_id = '$studentId' AND status = 'accepted'";
+$approved_appointments_query = "SELECT * FROM appointments WHERE student_id = '$studentId' AND status = 'pranuar'";
 $approved_appointments_result = mysqli_query($conn, $approved_appointments_query);
 ?>
 
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Student Dashboard</title>
+    <title>Profili i studentit</title>
     <link rel="stylesheet" href="./styles/studenti.css">
 </head>
 <body>
-    <h1>Student Dashboard</h1>
-    <h2>Schedule an Appointment</h2>
+    <h1>Profili i studentit</h1>
+    <h2>Cakto një konsultim</h2>
     <form method="POST" action="studenti.php">
         <?php
         // Fetch the list of professors from the database
@@ -74,23 +74,23 @@ $approved_appointments_result = mysqli_query($conn, $approved_appointments_query
         $professor_result = mysqli_query($conn, $professor_query);
 
         if (mysqli_num_rows($professor_result) > 0) {
-            echo '<label for="professor">Select a Professor:</label>';
+            echo '<label for="professor">Zgjedh një profesor:</label>';
             echo '<select name="professor" id="professor" required>';
             while ($row = mysqli_fetch_assoc($professor_result)) {
-                echo '<option value="' . $row['professor_id'] . '">' . $row['professor_name'] . '</option>';
+                echo '<option value="' . $row['professor_id'] . '">' . $row['professor_name'] ." " . $row['professor_surname'] .'</option>';
             }
             echo '</select>';
         }
         ?>
         <br><br>
-        <label for="datetime_start">Select a Start Date and Time:</label>
+        <label for="datetime_start">Zgjedh datën dhe orën e fillimit:</label>
         <input type="datetime-local" name="datetime_start" id="datetime_start" required><br><br>
-        <label for="datetime_end">Select an End Date and Time:</label>
+        <label for="datetime_end">Zgjedh datën dhe orën e përfundimit:</label>
         <input type="datetime-local" name="datetime_end" id="datetime_end" required><br><br>
 
-        <input type="submit" value="Schedule">
+        <input type="submit" value="Dërgo">
     </form>
-    <h2>Approved Appointments</h2>
+    <h2>Konsultimet e pranuara nga profesorët</h2>
     <?php
     if (mysqli_num_rows($approved_appointments_result) > 0) {
         while ($row = mysqli_fetch_assoc($approved_appointments_result)) {
@@ -107,13 +107,13 @@ $approved_appointments_result = mysqli_query($conn, $approved_appointments_query
                 $professorName = 'Unknown';
             }
 
-            echo '<p>Professor: ' . $professorName . '</p>';
-            echo '<p>Start Date and Time: ' . $row['datetime_start'] . '</p>';
-            echo '<p>End Date and Time: ' . $row['datetime_end'] . '</p>';
+            echo '<p>Profesori: ' . $professorName . '</p>';
+            echo '<p>Data dhe ora e fillimit: ' . $row['datetime_start'] . '</p>';
+            echo '<p>Data dhe ora e përfundimit: ' . $row['datetime_end'] . '</p>';
             echo '<hr>';
         }
     } else {
-        echo 'No approved appointments.';
+        echo 'Nuk keni konsultime të pranuara nga profesorët';
     }
     ?>
 </body>

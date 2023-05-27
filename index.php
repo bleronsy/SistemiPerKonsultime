@@ -117,10 +117,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         input[type="submit"]:hover {
             background-color: #45a049;
         }
+
+        a {
+            display: block;
+            text-align: center;
+            color: #999;
+            margin-top: 10px;
+        }
     </style>
 </head>
 <body>
-    <h1>Login</h1>
+    <h1>Kyçu</h1>
     <form method="POST" action="index.php">
         <label for="id">ID:</label>
         <input type="text" name="id" id="id" required>
@@ -129,6 +136,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         <input type="password" name="password" id="password" required>
 
         <input type="submit" value="Login">
+        <a href="./regjistrohu.php">Nuk keni llogari? Regjistrohu</a>
     </form>
 </body>
 </html>
