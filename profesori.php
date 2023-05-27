@@ -48,6 +48,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 <html>
 <head>
     <title>Professor Dashboard</title>
+    <link rel="stylesheet" href="./styles/profesori.php">
 </head>
 <body>
     <h1>Professor Dashboard</h1>

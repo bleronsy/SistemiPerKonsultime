@@ -62,6 +62,7 @@ $approved_appointments_result = mysqli_query($conn, $approved_appointments_query
 <html>
 <head>
     <title>Student Dashboard</title>
+    <link rel="stylesheet" href="./styles/studenti.css">
 </head>
 <body>
     <h1>Student Dashboard</h1>
