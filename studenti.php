@@ -33,6 +33,26 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     // Close the database connection
     mysqli_close($conn);
 }
+
+// Retrieve approved appointments
+$servername = 'localhost';
+$username = 'root';
+$password_db = '';
+$database = 'pd';
+
+$conn = mysqli_connect($servername, $username, $password_db, $database);
+
+// Check connection
+if (!$conn) {
+    die('Connection failed: ' . mysqli_connect_error());
+}
+
+$studentId = 1; // Replace with your authentication logic to get the student ID
+
+// Fetch the approved appointments for the student from the database
+$approved_appointments_query = "SELECT * FROM appointments WHERE student_id = '$studentId' AND status = 'accepted'";
+$approved_appointments_result = mysqli_query($conn, $approved_appointments_query);
+
 ?>
 
 <!DOCTYPE html>
@@ -45,18 +65,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <h2>Schedule an Appointment</h2>
     <form method="POST" action="studenti.php">
         <?php
-        $servername = 'localhost';
-        $username = 'root';
-        $password_db = '';
-        $database = 'pd';
-        // Connect to the database (replace with your database credentials)
-        $conn = mysqli_connect($servername, $username, $password_db, $database);
-
-        // Check connection
-        if (!$conn) {
-            die('Connection failed: ' . mysqli_connect_error());
-        }
-
         // Fetch the list of professors from the database
         $professor_query = "SELECT * FROM professors";
         $professor_result = mysqli_query($conn, $professor_query);
@@ -81,5 +89,18 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         <input type="submit" value="Schedule Appointment">
     </form>
+
+    <?php
+    // Display the approved appointments
+    if (mysqli_num_rows($approved_appointments_result) > 0) {
+        echo '<h2>Approved Appointments</h2>';
+        while ($row = mysqli_fetch_assoc($approved_appointments_result)) {
+            echo 'Professor: ' . $row['professor_id'] . '<br>';
+            echo 'Datetime: ' . $row['datetime'] . '<br>';
+            echo '<br>';
+        }
+    }
+    ?>
+
 </body>
 </html>
