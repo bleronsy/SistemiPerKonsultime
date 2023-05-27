@@ -1,4 +1,5 @@
 <?php
+session_start();
 // Check if the form is submitted
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     // Get the submitted ID and password
@@ -29,7 +30,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $studentId = $student_row['student_id'];
 
         // Start the session and set the student ID
-        session_start();
         $_SESSION['student_id'] = $studentId;
         $_SESSION['id'] = $studentId;
 
@@ -48,7 +48,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $professorId = $professor_row['professor_id'];
 
         // Start the session and set the professor ID
-        session_start();
         $_SESSION['professor_id'] = $professorId;
         $_SESSION['id'] = $professorId;
 
