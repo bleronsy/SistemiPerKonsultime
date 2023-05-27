@@ -48,8 +48,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['removeimportantmsg'])
 <div class= 'main'> 
     <div id="wrapper">
         <div id="menu">
-            <p class="welcome">Welcome, <b><?php echo $_SESSION['name']; ?></b></p>
-            <p class="logout"><a id="exit" href="chat.php?logout=true">Exit Chat</a></p>
+            <p class="welcome">Mirë se vini, <b><?php echo $_SESSION['name']; ?></b></p>
+            <p class="logout"><a id="exit" href="chat.php?logout=true">Largohu</a></p>
         </div>
         <div id="chatbox">
             <?php
@@ -77,10 +77,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['removeimportantmsg'])
         <div class="button-group">
         <form name="importantmessage" action="" method="post">
             <input name="importantmsg" type="text" id="importantmsg" />
-            <input name="submitimportantmsg" type="submit" id="submitimportantmsg" value="Send Important" />
+            <input name="submitimportantmsg" type="submit" id="submitimportantmsg" value="Dërgo diçka me rëndësi" />
         </form>
         <form name="removemessage" action="" method="post">
-            <input name="removeimportantmsg" type="submit" id="removeimportantmsg" value="Remove Messages" />
+            <input name="removeimportantmsg" type="submit" id="removeimportantmsg" value="Shlyej mesazhet" />
         </form>
         </div>
     <?php endif; ?>
@@ -227,13 +227,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['removeimportantmsg'])
 
             // Remove important messages from the smaller chatbox
             $("#removeimportantmsg").click(function () {
-                if (confirm("Are you sure you want to remove all important messages?")) {
+                if (confirm("A jeni i sigurtë që doni të fshini të gjitha mesazhet e rëndësishme?")) {
                     $.ajax({
                         type: 'POST',
                         url: 'chat.php',
                         data: { removeimportantmsg: true },
                         success: function (data) {
-                            console.log("Important messages removed successfully");
+                            console.log("Mesazhet e rëndësishme u fshinë me sukses");
                             // Clear the smaller chatbox
                             $('#smallerChatbox').html("");
                         }

@@ -87,6 +87,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['delete_appointment'])
 <body>
     <h1>Profili i profesorit</h1>
     <h2>Konsultimet</h2>
+    <a href="./chat.php">Komuniko në chat</a>
     <?php
     // Retrieve the professor ID from the logged-in professor (replace with your authentication logic)
     if (isset($_SESSION['professor_id'])) {

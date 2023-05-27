@@ -58,3 +58,17 @@ body {
     display: none;
   }
   
+  a {
+    padding: 8px 16px;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    text-decoration: none;
+  }
+  
+  a:hover {
+    background-color: #45a049;
+  }
+  

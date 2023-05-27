@@ -88,7 +88,8 @@ $approved_appointments_result = mysqli_query($conn, $approved_appointments_query
         <label for="datetime_end">Zgjedh datën dhe orën e përfundimit:</label>
         <input type="datetime-local" name="datetime_end" id="datetime_end" required><br><br>
 
-        <input type="submit" value="Dërgo">
+        <input type="submit" value="Dërgo"> <br>
+        <a href="./chat.php">Komuniko në chat</a>
     </form>
     <h2>Konsultimet e pranuara nga profesorët</h2>
     <?php
