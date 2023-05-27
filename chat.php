@@ -25,7 +25,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['usermsg'])) {
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['importantmsg'])) {
     $importantmsg = $_POST['importantmsg'];
-    $message = "<div class='msgln'><span class='user-name'>" . $_SESSION['name'] . "</span>: " . $importantmsg . "<br></div>";
+    $message = "<div class='msgln'><span class='user-name'>IMPORTANT-" . $_SESSION['name'] . "</span>: " . $importantmsg . "<br></div>";
     file_put_contents("important.html", $message, FILE_APPEND | LOCK_EX);
     exit();
 }
@@ -45,26 +45,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['removeimportantmsg'])
     <link rel="stylesheet" href="style.css" />
 </head>
 <body>
-<div id="smallerWrapper">
-    <h2>Important:</h2>
-        <div id="smallerChatbox">
-            <?php
-            if (file_exists("important.html") && filesize("important.html") > 0) {
-                $contents = file_get_contents("important.html");
-                echo $contents;
-            }
-            ?>
-        </div>
-        <?php if ($_SESSION['role'] === 'professor') : ?>
-            <form name="importantmessage" action="" method="post">
-                <input name="importantmsg" type="text" id="importantmsg" />
-                <input name="submitimportantmsg" type="submit" id="submitimportantmsg" value="Send Important" />
-            </form>
-            <form name="removemessage" action="" method="post">
-                <input name="removeimportantmsg" type="submit" id="removeimportantmsg" value="Remove Messages" />
-            </form>
-        <?php endif; ?>
-    </div>
+<div class= 'main'> 
     <div id="wrapper">
         <div id="menu">
             <p class="welcome">Welcome, <b><?php echo $_SESSION['name']; ?></b></p>
@@ -83,6 +64,28 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['removeimportantmsg'])
             <input name="submitmsg" type="submit" id="submitmsg" value="Send" />
         </form>
     </div>
+    <div id="smallerWrapper">
+    <div id="smallerChatbox">
+        <?php
+        if (file_exists("important.html") && filesize("important.html") > 0) {
+            $contents = file_get_contents("important.html");
+            echo $contents;
+        }
+        ?>
+    </div>
+    <?php if ($_SESSION['role'] === 'professor') : ?>
+        <div class="button-group">
+        <form name="importantmessage" action="" method="post">
+            <input name="importantmsg" type="text" id="importantmsg" />
+            <input name="submitimportantmsg" type="submit" id="submitimportantmsg" value="Send Important" />
+        </form>
+        <form name="removemessage" action="" method="post">
+            <input name="removeimportantmsg" type="submit" id="removeimportantmsg" value="Remove Messages" />
+        </form>
+        </div>
+    <?php endif; ?>
+    </div>
+</div>
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script type="text/javascript">
         // jQuery Document
