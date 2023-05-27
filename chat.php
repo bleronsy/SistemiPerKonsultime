@@ -3,7 +3,7 @@ session_start();
 
 if (isset($_GET['logout'])) {
     // Simple exit message
-    $logout_message = "<div class='msgln'><span class='left-info'>User <b class='user-name-left'>" . $_SESSION['email'] . "</b> has left the chat session.</span><br></div>";
+    $logout_message = "<div class='msgln'><span class='left-info'>User <b class='user-name-left'>" . $_SESSION['id'] . "</b> has left the chat session.</span><br></div>";
     file_put_contents("log.html", $logout_message, FILE_APPEND | LOCK_EX);
 
     session_destroy();
@@ -11,14 +11,14 @@ if (isset($_GET['logout'])) {
     exit();
 }
 
-if (!isset($_SESSION['email'])) {
+if (!isset($_SESSION['id'])) {
     header("Location: index.php");
     exit();
 }
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['usermsg'])) {
     $usermsg = $_POST['usermsg'];
-    $message = "<div class='msgln'><span class='user-name'>" . $_SESSION['email'] . "</span>: " . $usermsg . "<br></div>";
+    $message = "<div class='msgln'><span class='user-name'>" . $_SESSION['id'] . "</span>: " . $usermsg . "<br></div>";
     file_put_contents("log.html", $message, FILE_APPEND | LOCK_EX);
     exit();
 }
@@ -35,7 +35,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['usermsg'])) {
 <body>
     <div id="wrapper">
         <div id="menu">
-            <p class="welcome">Welcome, <b><?php echo $_SESSION['email']; ?></b></p>
+            <p class="welcome">Welcome, <b><?php echo $_SESSION['id']; ?></b></p>
             <p class="logout"><a id="exit" href="chat.php?logout=true">Exit Chat</a></p>
         </div>
         <div id="chatbox">
@@ -66,9 +66,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['usermsg'])) {
                 var messageType = receivedData.type;
 
                 if (messageType === 'usermsg') {
-                    var email = receivedData.email;
+                    var id = receivedData.id;
                     var message = receivedData.message;
-                    $('#chatbox').append('<div class="msgln"><b>' + email + ':</b> ' + message + '</div>');
+                    $('#chatbox').append('<div class="msgln"><b>' + id + ':</b> ' + message + '</div>');
                 } else if (messageType === 'userlist') {
                     var userList = receivedData.users;
                     var userListHTML = '';
@@ -90,13 +90,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['usermsg'])) {
                 if (clientmsg !== "") {
                     var data = {
                         type: "chat",
-                        email: "<?php echo $_SESSION['email']; ?>",
+                        id: "<?php echo $_SESSION['id']; ?>",
                         message: clientmsg
                     };
                     socket.send(JSON.stringify(data));
 
                     // Append the sent message to the chatbox
-                    $('#chatbox').append('<div class="msgln"><b><?php echo $_SESSION['email']; ?>:</b> ' + clientmsg + '</div>');
+                    $('#chatbox').append('<div class="msgln"><b><?php echo $_SESSION['id']; ?>:</b> ' + clientmsg + '</div>');
 
                     // Scroll to the bottom of the chatbox
                     var chatbox = document.getElementById("chatbox");
@@ -118,10 +118,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['usermsg'])) {
 
             $("#exit").click(function () {
                 var exit = confirm("Are you sure you want to end the session?");
-                if (exit == true) {
+                if (exit === true) {
                     var data = {
                         type: "exit",
-                        email: "<?php echo $_SESSION['email']; ?>"
+                        id: "<?php echo $_SESSION['id']; ?>"
                     };
                     socket.send(JSON.stringify(data));
                     socket.close();

@@ -24,7 +24,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     // Check if the student login is successful
     if (mysqli_num_rows($student_result) === 1) {
-        // Redirect to studenti.php
+        // Get the student ID
+        $student_row = mysqli_fetch_assoc($student_result);
+        $studentId = $student_row['student_id'];
+
+        // Start the session and set the student ID
+        session_start();
+        $_SESSION['id'] = $studentId;
+
         header('Location: studenti.php');
         exit();
     }
@@ -41,10 +48,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         // Start the session and set the professor ID
         session_start();
-        $_SESSION['professor_id'] = $professorId;
+        $_SESSION['id'] = $professorId;
 
-        // Redirect to profesori.php
-        header('Location: profesori.php');
+        // Redirect to professor chat page (professor_chat.php)
+        header('Location: professor_chat.php');
         exit();
     }
 
