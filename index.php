@@ -30,6 +30,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         // Start the session and set the student ID
         session_start();
+        $_SESSION['student_id'] = $studentId;
         $_SESSION['id'] = $studentId;
 
         header('Location: studenti.php');
@@ -48,6 +49,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         // Start the session and set the professor ID
         session_start();
+        $_SESSION['professor_id'] = $professorId;
         $_SESSION['id'] = $professorId;
 
         // Redirect to professor chat page (professor_chat.php)
