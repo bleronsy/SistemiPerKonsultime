@@ -186,6 +186,25 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['removeimportantmsg'])
                 });
             }, 3000);
 
+            // Load new messages for smallerChatbox every 3 seconds
+            setInterval(function () {
+                // Get current contents from smallerChatbox
+                var currentContents = $('#smallerChatbox').html();
+
+                // Load contents from important.html
+                $.ajax({
+                    url: 'important.html',
+                    dataType: 'html',
+                    success: function (data) {
+                        // Only append new messages to the smallerChatbox
+                        if (currentContents !== data) {
+                            $('#smallerChatbox').html(data);
+                        }
+                    }
+                });
+            }, 3000);
+
+
             // Submit important message to the server
             $("#submitimportantmsg").click(function () {
                 var importantmsg = $("#importantmsg").val();
