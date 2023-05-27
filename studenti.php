@@ -28,9 +28,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $insert_query = "INSERT INTO appointments (student_id, professor_id, datetime_start, datetime_end, status) VALUES ('$studentId', '$professorId', '$appointmentStartDatetime', '$appointmentEndDatetime', 'pending')";
 
     if (mysqli_query($conn, $insert_query)) {
-        echo "Appointment scheduled successfully.";
+        echo "Konsultimi u dërgua me sukses.";
     } else {
-        echo "Error scheduling the appointment: " . mysqli_error($conn);
+        echo "Problem në aranzhimin e konsultimit: " . mysqli_error($conn);
     }
 
     // Close the database connection
@@ -50,7 +50,7 @@ $conn = mysqli_connect($servername, $username, $password_db, $database);
 
 // Check connection
 if (!$conn) {
-    die('Connection failed: ' . mysqli_connect_error());
+    die('Lidhja dështoi: ' . mysqli_connect_error());
 }
 
 // Fetch the approved appointments for the student from the database
