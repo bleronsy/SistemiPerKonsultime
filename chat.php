@@ -22,6 +22,18 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['usermsg'])) {
     file_put_contents("log.html", $message, FILE_APPEND | LOCK_EX);
     exit();
 }
+
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['importantmsg'])) {
+    $importantmsg = $_POST['importantmsg'];
+    $message = "<div class='msgln'><span class='user-name'>" . $_SESSION['name'] . "</span>: " . $importantmsg . "<br></div>";
+    file_put_contents("important.html", $message, FILE_APPEND | LOCK_EX);
+    exit();
+}
+
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['removeimportantmsg'])) {
+    file_put_contents("important.html", ""); // Empty the "important.html" file
+    exit();
+}
 ?>
 
 <!DOCTYPE html>
@@ -33,6 +45,26 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['usermsg'])) {
     <link rel="stylesheet" href="style.css" />
 </head>
 <body>
+<div id="smallerWrapper">
+    <h2>Important:</h2>
+        <div id="smallerChatbox">
+            <?php
+            if (file_exists("important.html") && filesize("important.html") > 0) {
+                $contents = file_get_contents("important.html");
+                echo $contents;
+            }
+            ?>
+        </div>
+        <?php if ($_SESSION['role'] === 'professor') : ?>
+            <form name="importantmessage" action="" method="post">
+                <input name="importantmsg" type="text" id="importantmsg" />
+                <input name="submitimportantmsg" type="submit" id="submitimportantmsg" value="Send Important" />
+            </form>
+            <form name="removemessage" action="" method="post">
+                <input name="removeimportantmsg" type="submit" id="removeimportantmsg" value="Remove Messages" />
+            </form>
+        <?php endif; ?>
+    </div>
     <div id="wrapper">
         <div id="menu">
             <p class="welcome">Welcome, <b><?php echo $_SESSION['name']; ?></b></p>
@@ -150,7 +182,45 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['usermsg'])) {
                     }
                 });
             }, 3000);
+
+            // Submit important message to the server
+            $("#submitimportantmsg").click(function () {
+                var importantmsg = $("#importantmsg").val();
+                if (importantmsg !== "") {
+                    $.ajax({
+                        type: 'POST',
+                        url: 'chat.php',
+                        data: { importantmsg: importantmsg },
+                        success: function (data) {
+                            console.log("Important message submitted successfully");
+                            // Append the sent message to the smaller chatbox
+                            $('#smallerChatbox').append('<div class="msgln"><b><?php echo $_SESSION['name']; ?>:</b> ' + importantmsg + '</div>');
+                            // Clear the input field
+                            $("#importantmsg").val("");
+                        }
+                    });
+                }
+                return false;
+            });
+
+            // Remove important messages from the smaller chatbox
+            $("#removeimportantmsg").click(function () {
+                if (confirm("Are you sure you want to remove all important messages?")) {
+                    $.ajax({
+                        type: 'POST',
+                        url: 'chat.php',
+                        data: { removeimportantmsg: true },
+                        success: function (data) {
+                            console.log("Important messages removed successfully");
+                            // Clear the smaller chatbox
+                            $('#smallerChatbox').html("");
+                        }
+                    });
+                }
+                return false;
+            });
         });
+        
     </script>
 </body>
 </html>

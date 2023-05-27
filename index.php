@@ -35,7 +35,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $_SESSION['student_id'] = $studentId;
         $_SESSION['id'] = $studentId; // Set the ID for compatibility with the existing code
         $_SESSION['name'] = $studentName;
-
+        $_SESSION['role']='student';
         header('Location: studenti.php');
         exit();
     }
@@ -55,6 +55,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $_SESSION['professor_id'] = $professorId;
         $_SESSION['id'] = $professorId; // Set the ID for compatibility with the existing code
         $_SESSION['name'] =$professorName;
+        $_SESSION['role']='professor';
 
         // Redirect to professor chat page (professor_chat.php)
         header('Location: profesori.php');
