@@ -2,12 +2,12 @@
 session_start();
 
 if (isset($_GET['logout'])) {
-    // Simple exit message
-    $logout_message = "<div class='msgln'><span class='left-info'>User <b class='user-name-left'>" . $_SESSION['name'] . "</b> has left the chat session.</span><br></div>";
-    file_put_contents("log.html", $logout_message, FILE_APPEND | LOCK_EX);
-
-    session_destroy();
-    header("Location: index.php");
+    // Redirect to the appropriate page based on the user's role
+    if ($_SESSION['role'] === 'professor') {
+        header("Location: profesori.php");
+    } else {
+        header("Location: studenti.php");
+    }
     exit();
 }
 
@@ -43,20 +43,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['removeimportantmsg'])
     <title>Tuts+ Chat Application</title>
     <meta name="description" content="Tuts+ Chat Application" />
     <link rel="stylesheet" href="style.css" />
-    <style>
-        a {
-            padding: 8px 16px;
-            background-color: #4CAF50;
-            color: white;
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
-            text-decoration: none;
-        }
-    </style>
 </head>
 <body>
-<a href='logout.php'>Log out</a>
 <div class= 'main'> 
     <div id="wrapper">
         <div id="menu">
@@ -73,7 +61,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['removeimportantmsg'])
         </div>
         <form name="message" action="" method="post">
             <input name="usermsg" type="text" id="usermsg" />
-            <input name="submitmsg" type="submit" id="submitmsg" value="Send" />
+            <input name="submitmsg" type="submit" id="submitmsg" value="Dërgo" />
         </form>
     </div>
     <div id="smallerWrapper">
