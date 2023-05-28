@@ -86,7 +86,7 @@
         $password = $_POST['password'];
         $role = $_POST['role'];
 
-        // Check if the user is a professor or a student and insert into the respective table
+        // Check if the user is a professor or a student and insert into the table
         if ($role === 'professor') {
             // Insert into the 'professors' table
             $sql = "INSERT INTO professors (professor_id, professor_name, professor_surname, professor_password) VALUES ('$id', '$emri', '$mbiemri', '$password')";

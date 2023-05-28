@@ -25,7 +25,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['usermsg'])) {
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['importantmsg'])) {
     $importantmsg = $_POST['importantmsg'];
-    $message = "<div class='msgln'><span class='user-name'>IMPORTANT-" . $_SESSION['name'] . "</span>: " . $importantmsg . "<br></div>";
+    $message = "<div class='msgln'><span class='user-name'>ME RËNDËSI-" . $_SESSION['name'] . "</span>: " . $importantmsg . "<br></div>";
     file_put_contents("important.html", $message, FILE_APPEND | LOCK_EX);
     exit();
 }
@@ -40,8 +40,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['removeimportantmsg'])
 <html lang="en">
 <head>
     <meta charset="utf-8" />
-    <title>Tuts+ Chat Application</title>
-    <meta name="description" content="Tuts+ Chat Application" />
+    <title>Komunikimi me mesazh</title>
+    <meta name="description" content="Komunikimi me mesazh" />
     <link rel="stylesheet" href="style.css" />
 </head>
 <body>
@@ -143,7 +143,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['removeimportantmsg'])
                         url: 'chat.php',
                         data: { usermsg: clientmsg },
                         success: function (data) {
-                            console.log("Message submitted successfully");
+                            console.log("Mesazhi u dërgua me sukses");
                         }
                     });
                 }
@@ -152,7 +152,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['removeimportantmsg'])
             });
 
             $("#exit").click(function () {
-                var exit = confirm("Are you sure you want to end the session?");
+                var exit = confirm("A jeni i sigurt?");
                 if (exit == true) {
                     var data = {
                         type: "exit",
@@ -214,7 +214,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['removeimportantmsg'])
                         url: 'chat.php',
                         data: { importantmsg: importantmsg },
                         success: function (data) {
-                            console.log("Important message submitted successfully");
+                            console.log("Mesazhi i rëndësishëm u dërgua me sukses");
                             // Append the sent message to the smaller chatbox
                             $('#smallerChatbox').append('<div class="msgln"><b><?php echo $_SESSION['name']; ?>:</b> ' + importantmsg + '</div>');
                             // Clear the input field
@@ -227,7 +227,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['removeimportantmsg'])
 
             // Remove important messages from the smaller chatbox
             $("#removeimportantmsg").click(function () {
-                if (confirm("A jeni i sigurtë që doni të fshini të gjitha mesazhet e rëndësishme?")) {
+                if (confirm("A jeni i sigurt që doni të fshini të gjitha mesazhet e rëndësishme?")) {
                     $.ajax({
                         type: 'POST',
                         url: 'chat.php',

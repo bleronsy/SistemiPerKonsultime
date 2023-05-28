@@ -11,7 +11,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     // Get the logged-in student ID from the session
     $studentId = $_SESSION['student_id'];
 
-    // Connect to the database (replace with your database credentials)
+    // Connect to the database
     $servername = 'localhost';
     $username = 'root';
     $password_db = '';
@@ -21,7 +21,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     // Check connection
     if (!$conn) {
-        die('Connection failed: ' . mysqli_connect_error());
+        die('Lidhja dështoi: ' . mysqli_connect_error());
     }
 
     // Insert the appointment into the appointments table
@@ -40,7 +40,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 // Retrieve approved appointments
 $studentId = $_SESSION['student_id']; // Retrieve student ID from session
 
-// Connect to the database (replace with your database credentials)
+// Connect to the database
 $servername = 'localhost';
 $username = 'root';
 $password_db = '';

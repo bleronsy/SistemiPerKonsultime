@@ -5,11 +5,11 @@ session_start();
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     // Check if appointment_id and decision are set
     if (isset($_POST['appointment_id'], $_POST['decision'])) {
-        // Get the appointment ID and decision (accept or refuse)
+        // Get the appointment ID and decision (prano ose refuzo)
         $appointmentId = $_POST['appointment_id'];
         $decision = $_POST['decision'];
 
-        // Connect to the database (replace with your database credentials)
+        // Connect to the database
         $servername = 'localhost';
         $username = 'root';
         $password_db = '';
@@ -51,7 +51,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['delete_appointment'])
     // Get the appointment ID to be deleted
     $deleteAppointmentId = $_POST['delete_appointment'];
 
-    // Connect to the database (replace with your database credentials)
+    // Connect to the database
     $servername = 'localhost';
     $username = 'root';
     $password_db = '';
@@ -90,7 +90,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['delete_appointment'])
     <h2>Konsultimet</h2>
     <a href="./chat.php">Komuniko në chat</a>
     <?php
-    // Retrieve the professor ID from the logged-in professor (replace with your authentication logic)
+    // Retrieve the professor ID from the logged-in professor
     if (isset($_SESSION['professor_id'])) {
         $professorId = $_SESSION['professor_id'];
 
@@ -104,7 +104,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['delete_appointment'])
 
         // Check connection
         if (!$conn) {
-            die('Connection failed: ' . mysqli_connect_error());
+            die('Lidhja dështoi: ' . mysqli_connect_error());
         }
 
         // Fetch the list of appointments for the professor from the database
