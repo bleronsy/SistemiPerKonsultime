@@ -1,5 +1,6 @@
 <?php
 session_start(); // Start the session
+$conditionMet = false;
 
 // Check if the form is submitted
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
@@ -22,6 +23,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     // Check connection
     if (!$conn) {
         die('Lidhja dështoi: ' . mysqli_connect_error());
+    }
+    $queryLiveAppoint = "SELECT * FROM appointments WHERE student_id = {$_SESSION['student_id']} AND status = 'pranuar' AND  NOW() BETWEEN datetime_start AND datetime_end";
+    $liveResults = mysqli_query($conn, $queryLiveAppoint);
+    if (mysqli_num_rows($liveResults) > 0) {
+        $conditionMet = true;
     }
 
     // Insert the appointment into the appointments table
@@ -53,6 +59,15 @@ if (!$conn) {
     die('Lidhja dështoi: ' . mysqli_connect_error());
 }
 
+// Fetch the live appointments for the student from the database
+$queryLiveAppoint = "SELECT * FROM appointments WHERE student_id = '$studentId' AND status = 'pranuar' AND NOW() BETWEEN datetime_start AND datetime_end";
+$liveResults = mysqli_query($conn, $queryLiveAppoint);
+
+// Check if there are live appointments
+if (mysqli_num_rows($liveResults) > 0) {
+    $conditionMet = true;
+}
+
 // Fetch the approved appointments for the student from the database
 $approved_appointments_query = "SELECT * FROM appointments WHERE student_id = '$studentId' AND status = 'pranuar'";
 $approved_appointments_result = mysqli_query($conn, $approved_appointments_query);
@@ -66,7 +81,38 @@ $approved_appointments_result = mysqli_query($conn, $approved_appointments_query
 </head>
 <body>
     <h1>Profili i studentit</h1>
-    <a href='logout.php'>Log out</a>
+    <div style="margin-bottom: 30px;"><a href='logout.php'>Log out</a></div>
+    <div>
+        Konsiltimet ne zhvillim:
+        <?php
+
+        if ($conditionMet) {
+            while ($row = mysqli_fetch_assoc($liveResults)) {
+                $professorId = $row['professor_id'];
+
+                // Fetch the professor's name from the professors table
+                $professor_query = "SELECT professor_name FROM professors WHERE professor_id = '$professorId'";
+                $professor_result = mysqli_query($conn, $professor_query);
+
+                if (mysqli_num_rows($professor_result) > 0) {
+                    $professor_row = mysqli_fetch_assoc($professor_result);
+                    $professorName = $professor_row['professor_name'];
+                } else {
+                    $professorName = 'Unknown';
+                }
+
+                echo '<p>Profesori: ' . $professorName . '</p>';
+                echo '<p>Data dhe ora e fillimit: ' . $row['datetime_start'] . '</p>';
+                echo '<p>Data dhe ora e përfundimit: ' . $row['datetime_end'] . '</p>';
+                echo '<br>';
+                echo '<a href="http://localhost:5173">Shko te takimi</a>';
+                echo '<hr>';
+            }
+        } else {
+            echo 'Nuk keni konsultime të pranuara nga profesorët ne kete kohe.';
+        }
+        ?>
+    </div>
     <h2>Cakto një konsultim</h2>
     <form method="POST" action="studenti.php">
         <?php
@@ -78,7 +124,7 @@ $approved_appointments_result = mysqli_query($conn, $approved_appointments_query
             echo '<label for="professor">Zgjedh një profesor:</label>';
             echo '<select name="professor" id="professor" required>';
             while ($row = mysqli_fetch_assoc($professor_result)) {
-                echo '<option value="' . $row['professor_id'] . '">' . $row['professor_name'] ." " . $row['professor_surname'] .'</option>';
+                echo '<option value="' . $row['professor_id'] . '">' . $row['professor_name'] . " " . $row['professor_surname'] . '</option>';
             }
             echo '</select>';
         }

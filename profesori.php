@@ -170,5 +170,64 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['delete_appointment'])
         echo 'Nuk jeni i kyçur si profesor.';
     }
     ?>
+<h2>Konsultimet në zhvillim</h2>
+<?php
+// Retrieve the professor ID from the logged-in professor
+if (isset($_SESSION['professor_id'])) {
+    $professorId = $_SESSION['professor_id'];
+
+    $servername = 'localhost';
+    $username = 'root';
+    $password_db = '';
+    $database = 'pd';
+
+    // Connect to the database (replace with your database credentials)
+    $conn = mysqli_connect($servername, $username, $password_db, $database);
+
+    // Check connection
+    if (!$conn) {
+        die('Lidhja dështoi: ' . mysqli_connect_error());
+    }
+
+    // Fetch the list of live appointments for the professor from the database
+    $live_appointments_query = "SELECT * FROM appointments WHERE professor_id = '$professorId' AND status = 'pranuar' AND NOW() BETWEEN datetime_start AND datetime_end;";
+    $live_appointments_result = mysqli_query($conn, $live_appointments_query);
+
+    if (mysqli_num_rows($live_appointments_result) > 0) {
+        echo '<table>';
+        echo '<tr><th>ID e Konsultimit</th><th>Studenti</th><th>Fillimi</th><th>Përfundimi</th><th>Takimi online</th></tr>';
+        while ($row = mysqli_fetch_assoc($live_appointments_result)) {
+            echo '<tr>';
+            echo '<td>' . $row['appointment_id'] . '</td>';
+            $studentId = $row['student_id'];
+
+            // Fetch the student's name and surname from the students table
+            $student_query = "SELECT student_name, student_surname FROM students WHERE student_id = '$studentId'";
+            $student_result = mysqli_query($conn, $student_query);
+
+            if (mysqli_num_rows($student_result) > 0) {
+                $student_row = mysqli_fetch_assoc($student_result);
+                $studentName = $student_row['student_name'];
+                $studentSurname = $student_row['student_surname'];
+            } else {
+                $studentName = 'Unknown';
+                $studentSurname = 'Unknown';
+            }
+
+            echo '<td>' . $studentName . ' ' . $studentSurname . '</td>';
+            echo '<td>' . $row['datetime_start'] . '</td>';
+            echo '<td>' . $row['datetime_end'] . '</td>';
+            echo '<td><a href="http://localhost:5173">Shko te takimi</a></td>';
+            echo '</tr>';
+        }
+        echo '</table>';
+    } else {
+        echo 'Nuk ka konsultime në zhvillim.';
+    }
+
+    // Close the database connection
+    mysqli_close($conn);
+}
+?>
 </body>
 </html>
