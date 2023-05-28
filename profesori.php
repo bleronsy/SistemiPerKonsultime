@@ -136,7 +136,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['delete_appointment'])
                 echo '<td>' . $row['datetime_start'] . '</td>';
                 echo '<td>' . $row['datetime_end'] . '</td>';
                 echo '<td>' . $row['status'] . '</td>';
-                if ($row['status'] === 'pending') {
+                if ($row['status'] === 'në pritje') {
                     echo '<td>';
                     echo '<form method="POST" action="profesori.php">';
                     echo '<input type="hidden" name="appointment_id" value="' . $row['appointment_id'] . '">';
@@ -147,7 +147,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['delete_appointment'])
                 } else {
                     echo '<td></td>';
                 }
-                if ($row['status'] !== 'pending') {
+                if ($row['status'] !== 'në pritje') {
                     echo '<td>';
                     echo '<form method="POST" action="profesori.php">';
                     echo '<input type="hidden" name="delete_appointment" value="' . $row['appointment_id'] . '">';

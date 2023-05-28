@@ -25,7 +25,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 
     // Insert the appointment into the appointments table
-    $insert_query = "INSERT INTO appointments (student_id, professor_id, datetime_start, datetime_end, status) VALUES ('$studentId', '$professorId', '$appointmentStartDatetime', '$appointmentEndDatetime', 'pending')";
+    $insert_query = "INSERT INTO appointments (student_id, professor_id, datetime_start, datetime_end, status) VALUES ('$studentId', '$professorId', '$appointmentStartDatetime', '$appointmentEndDatetime', 'në pritje')";
 
     if (mysqli_query($conn, $insert_query)) {
         echo "Konsultimi u dërgua me sukses.";
