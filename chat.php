@@ -43,8 +43,20 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['removeimportantmsg'])
     <title>Tuts+ Chat Application</title>
     <meta name="description" content="Tuts+ Chat Application" />
     <link rel="stylesheet" href="style.css" />
+    <style>
+        a {
+            padding: 8px 16px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            text-decoration: none;
+        }
+    </style>
 </head>
 <body>
+<a href='logout.php'>Log out</a>
 <div class= 'main'> 
     <div id="wrapper">
         <div id="menu">

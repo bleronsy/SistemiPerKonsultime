@@ -86,6 +86,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['delete_appointment'])
 </head>
 <body>
     <h1>Profili i profesorit</h1>
+    <a href='logout.php'>Log out</a>
     <h2>Konsultimet</h2>
     <a href="./chat.php">Komuniko në chat</a>
     <?php

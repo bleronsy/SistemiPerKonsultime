@@ -66,6 +66,7 @@ $approved_appointments_result = mysqli_query($conn, $approved_appointments_query
 </head>
 <body>
     <h1>Profili i studentit</h1>
+    <a href='logout.php'>Log out</a>
     <h2>Cakto një konsultim</h2>
     <form method="POST" action="studenti.php">
         <?php
