@@ -2,13 +2,9 @@ import AgoraRTC from "agora-rtc-sdk-ng"
 
 let options =
 {
-    // Pass your App ID here.
     appId: 'fdad5e6696154030b0fec904ed4a21e9',
-    // Set the channel name.
     channel: 'channel1',
-    // Pass your temp token here.
     token: '007eJxTYOCrvLA5+sHKiW9O3367babyQesVmY80Sv6syBc4uOLSouAnCgxpKYkppqlmZpZmhqYmBsYGSQZpqcmWBiapKSaJRoapllrrilMaAhkZJjceZmJkgEAQn4MhOSMxLy81x5CBAQAR+iSi',
-    // Set the user ID.
     uid: 0,
 };
 
@@ -28,7 +24,6 @@ let channelParameters =
 async function startBasicCall()
 {
 // Create an instance of the Agora Engine
-
 const agoraEngine = AgoraRTC.createClient({ mode: "rtc", codec: "vp8" });
 // Dynamically create a container in the form of a DIV element to play the remote video track.
 const remotePlayerContainer = document.createElement("div");
@@ -81,7 +76,7 @@ if (mediaType == "audio")
 // Listen for the "user-unpublished" event.
 agoraEngine.on("user-unpublished", user =>
 {
-    console.log(user.uid+ "has left the channel");
+    console.log(user.uid+ "u largua");
 });
     });
 window.onload = function ()
